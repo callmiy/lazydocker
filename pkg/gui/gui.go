@@ -171,6 +171,16 @@ func (gui *Gui) renderGlobalOptions() error {
 	})
 }
 
+func (gui *Gui) renderMainOptions() error {
+	return gui.renderOptionsMap(map[string]string{
+		"PgUp/PgDn": gui.Tr.Scroll,
+		"← → ↑ ↓":   gui.Tr.Navigate,
+		"gg":        gui.Tr.GotoTop,
+		"G":         gui.Tr.GotoBottom,
+		"esc":       gui.Tr.Return,
+	})
+}
+
 func (gui *Gui) goEvery(interval time.Duration, function func() error) {
 	_ = function() // time.Tick doesn't run immediately so we'll do that here // TODO: maybe change
 	go func() {
