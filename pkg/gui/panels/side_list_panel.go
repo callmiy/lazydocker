@@ -68,6 +68,10 @@ type SideListPanel[T comparable] struct {
 
 var _ ISideListPanel = &SideListPanel[int]{}
 
+func containsCaseInsensitive(value, query string) bool {
+	return strings.Contains(strings.ToLower(value), strings.ToLower(query))
+}
+
 type IGui interface {
 	HandleClick(v *gocui.View, itemCount int, selectedLine *int, handleSelect func() error) error
 	NewSimpleRenderStringTask(getContent func() string) tasks.TaskFunc
@@ -232,7 +236,7 @@ func (self *SideListPanel[T]) FilterAndSort() {
 
 		if filterString != "" {
 			return lo.SomeBy(self.GetTableCells(item), func(searchString string) bool {
-				return strings.Contains(searchString, filterString)
+				return containsCaseInsensitive(searchString, filterString)
 			})
 		}
 
