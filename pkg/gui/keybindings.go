@@ -13,12 +13,17 @@ type Binding struct {
 	ViewName    string
 	Handler     func(*gocui.Gui, *gocui.View) error
 	Key         interface{} // FIXME: find out how to get `gocui.Key | rune`
+	DisplayKey  string
 	Modifier    gocui.Modifier
 	Description string
 }
 
 // GetKey is a function.
 func (b *Binding) GetKey() string {
+	if b.DisplayKey != "" {
+		return b.DisplayKey
+	}
+
 	key := 0
 
 	switch b.Key.(type) {
@@ -462,14 +467,15 @@ func (gui *Gui) GetInitialKeybindings() []*Binding {
 			Handler:  gui.scrollRightMain,
 		},
 		{
-			ViewName:    "main",
+			ViewName:    "",
 			Key:         'g',
+			DisplayKey:  "gg",
 			Modifier:    gocui.ModNone,
 			Handler:     gui.gotoTopMain,
 			Description: gui.Tr.GotoTop,
 		},
 		{
-			ViewName:    "main",
+			ViewName:    "",
 			Key:         'G',
 			Modifier:    gocui.ModNone,
 			Handler:     gui.gotoBottomMain,

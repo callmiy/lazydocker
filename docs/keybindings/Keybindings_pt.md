@@ -98,13 +98,13 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
 
 <pre>
   <kbd>esc</kbd>: retornar
-  <kbd>g</kbd>: scroll to top
-  <kbd>G</kbd>: scroll to bottom
 </pre>
 
 ## Global
 
 <pre>
+  <kbd>gg</kbd>: scroll to top
+  <kbd>G</kbd>: scroll to bottom
   <kbd>+</kbd>: modo de tela seguinte (normal/meia/tela cheia)
   <kbd>_</kbd>: modo de tela anterior
   <kbd>1</kbd>: focus projects panel

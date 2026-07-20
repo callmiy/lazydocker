@@ -56,7 +56,7 @@ func TestGotoBottomOriginY(t *testing.T) {
 
 func TestIsDoublePress(t *testing.T) {
 	now := time.Unix(1000, 0)
-	timeout := 250 * time.Millisecond
+	timeout := time.Second
 
 	type scenario struct {
 		name     string
@@ -87,6 +87,12 @@ func TestIsDoublePress(t *testing.T) {
 		{
 			name:     "second press after the timeout is not a double press",
 			previous: now.Add(-timeout - time.Millisecond),
+			now:      now,
+			expected: false,
+		},
+		{
+			name:     "clock moving backwards is not a double press",
+			previous: now.Add(time.Millisecond),
 			now:      now,
 			expected: false,
 		},
