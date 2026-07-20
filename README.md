@@ -1,3 +1,8 @@
+> [!NOTE]
+> This branch is Callmiy's curated personal distribution of lazydocker. It
+> tracks upstream while integrating selected pull requests and personal
+> changes. See [the personal fork workflow](docs/personal-fork.md).
+
 <div align="center">
 <sup>Special thanks to:</sup>
 <br>

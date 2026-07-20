@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+  echo "usage: $0 <upstream-pr-number> <short-slug>" >&2
+  exit 2
+}
+
+[[ $# -eq 2 ]] || usage
+
+pr_number=$1
+slug=$2
+
+[[ $pr_number =~ ^[1-9][0-9]*$ ]] || {
+  echo "error: pull request number must be a positive integer" >&2
+  exit 2
+}
+
+[[ $slug =~ ^[a-z0-9][a-z0-9-]*$ ]] || {
+  echo "error: slug must contain lowercase letters, numbers, or hyphens" >&2
+  exit 2
+}
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+[[ -z $(git status --porcelain) ]] || {
+  echo "error: working tree must be clean before importing a pull request" >&2
+  exit 1
+}
+
+current_branch=$(git branch --show-current)
+[[ $current_branch == personal ]] || {
+  echo "error: switch to the personal branch before importing a pull request" >&2
+  exit 1
+}
+
+git remote get-url upstream >/dev/null 2>&1 || {
+  echo "error: upstream remote is not configured" >&2
+  exit 1
+}
+
+branch="import/pr-${pr_number}-${slug}"
+remote_ref="refs/remotes/upstream/pr/${pr_number}"
+
+if git show-ref --verify --quiet "refs/heads/$branch"; then
+  echo "error: local branch $branch already exists" >&2
+  exit 1
+fi
+
+git fetch --force upstream "pull/${pr_number}/head:${remote_ref}"
+
+if git merge-base --is-ancestor "$remote_ref" personal; then
+  echo "error: upstream PR #${pr_number} is already contained in personal" >&2
+  exit 1
+fi
+
+git switch -c "$branch" personal
+
+if ! git merge --no-ff --no-commit "$remote_ref"; then
+  echo "merge needs attention; resolve conflicts or run: git merge --abort" >&2
+  exit 1
+fi
+
+echo "prepared upstream PR #${pr_number} on ${branch}"
+echo "inspect the staged merge before running code or committing"
