@@ -97,10 +97,8 @@ func (gui *Gui) jumpToTopMain(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
-// gotoTopMain implements the vim-style "gg" command: the first 'g' arms the
-// sequence and the second 'g' pressed within gPressTimeout jumps to the top of
-// the main panel.
-func (gui *Gui) gotoTopMain(g *gocui.Gui, v *gocui.View) error {
+// handleGotoTop runs an action after a vim-style "gg" sequence.
+func (gui *Gui) handleGotoTop(action func() error) error {
 	now := time.Now()
 	if !isDoublePress(gui.State.lastGPressedAt, now, gPressTimeout) {
 		gui.State.lastGPressedAt = now
@@ -108,22 +106,36 @@ func (gui *Gui) gotoTopMain(g *gocui.Gui, v *gocui.View) error {
 	}
 
 	gui.State.lastGPressedAt = time.Time{}
-	return gui.jumpToTopMain(g, v)
+	return action()
+}
+
+// gotoTopMain implements the vim-style "gg" command for the main panel.
+func (gui *Gui) gotoTopMain(g *gocui.Gui, v *gocui.View) error {
+	return gui.handleGotoTop(func() error {
+		return gui.jumpToTopMain(g, v)
+	})
+}
+
+// handleGotoBottom runs an action for the vim-style "G" command and clears a
+// pending "gg" sequence.
+func (gui *Gui) handleGotoBottom(action func() error) error {
+	gui.State.lastGPressedAt = time.Time{}
+	return action()
 }
 
 // gotoBottomMain implements the vim-style "G" command, jumping to the bottom of
 // the main panel.
 func (gui *Gui) gotoBottomMain(g *gocui.Gui, v *gocui.View) error {
-	gui.State.lastGPressedAt = time.Time{}
+	return gui.handleGotoBottom(func() error {
+		mainView := gui.Views.Main
+		mainView.Autoscroll = false
 
-	mainView := gui.Views.Main
-	mainView.Autoscroll = false
+		_, viewHeight := mainView.Size()
+		ox, _ := mainView.Origin()
+		newOy := gotoBottomOriginY(mainView.ViewLinesHeight(), viewHeight, gui.Config.UserConfig.Gui.ScrollPastBottom)
 
-	_, viewHeight := mainView.Size()
-	ox, _ := mainView.Origin()
-	newOy := gotoBottomOriginY(mainView.ViewLinesHeight(), viewHeight, gui.Config.UserConfig.Gui.ScrollPastBottom)
-
-	return mainView.SetOrigin(ox, newOy)
+		return mainView.SetOrigin(ox, newOy)
+	})
 }
 
 func (gui *Gui) onMainTabClick(tabIndex int) error {

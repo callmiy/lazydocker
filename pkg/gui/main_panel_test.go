@@ -104,3 +104,34 @@ func TestIsDoublePress(t *testing.T) {
 		})
 	}
 }
+
+func TestHandleGotoTopRunsActionOnSecondPress(t *testing.T) {
+	gui := &Gui{}
+	callCount := 0
+	action := func() error {
+		callCount++
+		return nil
+	}
+
+	assert.NoError(t, gui.handleGotoTop(action))
+	assert.Equal(t, 0, callCount)
+
+	assert.NoError(t, gui.handleGotoTop(action))
+	assert.Equal(t, 1, callCount)
+	assert.True(t, gui.State.lastGPressedAt.IsZero())
+}
+
+func TestHandleGotoBottomRunsActionAndClearsPendingTop(t *testing.T) {
+	gui := &Gui{}
+	gui.State.lastGPressedAt = time.Now()
+	callCount := 0
+
+	err := gui.handleGotoBottom(func() error {
+		callCount++
+		return nil
+	})
+
+	assert.NoError(t, err)
+	assert.Equal(t, 1, callCount)
+	assert.True(t, gui.State.lastGPressedAt.IsZero())
+}

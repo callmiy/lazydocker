@@ -539,6 +539,12 @@ func (gui *Gui) GetInitialKeybindings() []*Binding {
 			{ViewName: panel.GetView().Name(), Key: 'l', Modifier: gocui.ModNone, Handler: gui.nextView},
 			{ViewName: panel.GetView().Name(), Key: gocui.KeyTab, Modifier: gocui.ModNone, Handler: gui.nextView},
 			{ViewName: panel.GetView().Name(), Key: gocui.KeyBacktab, Modifier: gocui.ModNone, Handler: gui.previousView},
+			{ViewName: panel.GetView().Name(), Key: 'g', DisplayKey: "gg", Modifier: gocui.ModNone, Handler: wrappedHandler(func() error {
+				return gui.handleGotoTop(panel.HandleGotoTop)
+			}), Description: gui.Tr.GotoTop},
+			{ViewName: panel.GetView().Name(), Key: 'G', Modifier: gocui.ModNone, Handler: wrappedHandler(func() error {
+				return gui.handleGotoBottom(panel.HandleGotoBottom)
+			}), Description: gui.Tr.GotoBottom},
 		}...)
 	}
 

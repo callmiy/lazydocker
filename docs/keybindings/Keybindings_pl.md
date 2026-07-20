@@ -8,6 +8,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: edytuj konfigurację
   <kbd>o</kbd>: otwórz konfigurację
   <kbd>m</kbd>: pokaż logi
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: skup na głównym panelu
   <kbd>[</kbd>: poprzednia zakładka
   <kbd>]</kbd>: następna zakładka
@@ -28,6 +30,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: wykonaj predefiniowaną własną komende
   <kbd>b</kbd>: view bulk commands
   <kbd>w</kbd>: open in browser (first port is http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: skup na głównym panelu
   <kbd>[</kbd>: poprzednia zakładka
   <kbd>]</kbd>: następna zakładka
@@ -52,6 +56,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>b</kbd>: view bulk commands
   <kbd>E</kbd>: exec shell
   <kbd>w</kbd>: open in browser (first port is http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: skup na głównym panelu
   <kbd>[</kbd>: poprzednia zakładka
   <kbd>]</kbd>: następna zakładka
@@ -64,6 +70,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: wykonaj predefiniowaną własną komende
   <kbd>d</kbd>: usuń obraz
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: skup na głównym panelu
   <kbd>[</kbd>: poprzednia zakładka
   <kbd>]</kbd>: następna zakładka
@@ -76,6 +84,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: wykonaj predefiniowaną własną komende
   <kbd>d</kbd>: usuń wolumen
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: skup na głównym panelu
   <kbd>[</kbd>: poprzednia zakładka
   <kbd>]</kbd>: następna zakładka
@@ -88,6 +98,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: wykonaj predefiniowaną własną komende
   <kbd>d</kbd>: usuń sieci
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: skup na głównym panelu
   <kbd>[</kbd>: poprzednia zakładka
   <kbd>]</kbd>: następna zakładka
@@ -103,8 +115,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
 ## Globalne
 
 <pre>
-  <kbd>gg</kbd>: scroll to top
-  <kbd>G</kbd>: scroll to bottom
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>+</kbd>: next screen mode (normal/half/fullscreen)
   <kbd>_</kbd>: prev screen mode
   <kbd>1</kbd>: focus projects panel

@@ -8,6 +8,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: modifier la configuration lazydocker
   <kbd>o</kbd>: ouvrir la configuration lazydocker
   <kbd>m</kbd>: voir les enregistrements
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus panneau principal
   <kbd>[</kbd>: onglet précédent
   <kbd>]</kbd>: onglet suivant
@@ -28,6 +30,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: exécuter une commande prédéfinie
   <kbd>b</kbd>: voir les commandes groupées
   <kbd>w</kbd>: ouvrir dans le navigateur (le premier port est http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus panneau principal
   <kbd>[</kbd>: onglet précédent
   <kbd>]</kbd>: onglet suivant
@@ -52,6 +56,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>b</kbd>: voir les commandes groupées
   <kbd>E</kbd>: exécuter le shell
   <kbd>w</kbd>: ouvrir dans le navigateur (le premier port est http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus panneau principal
   <kbd>[</kbd>: onglet précédent
   <kbd>]</kbd>: onglet suivant
@@ -64,6 +70,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: exécuter une commande prédéfinie
   <kbd>d</kbd>: supprimer l'image
   <kbd>b</kbd>: voir les commandes groupées
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus panneau principal
   <kbd>[</kbd>: onglet précédent
   <kbd>]</kbd>: onglet suivant
@@ -76,6 +84,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: exécuter une commande prédéfinie
   <kbd>d</kbd>: supprimer le volume
   <kbd>b</kbd>: voir les commandes groupées
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus panneau principal
   <kbd>[</kbd>: onglet précédent
   <kbd>]</kbd>: onglet suivant
@@ -88,6 +98,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: exécuter une commande prédéfinie
   <kbd>d</kbd>: supprimer le réseau
   <kbd>b</kbd>: voir les commandes groupées
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus panneau principal
   <kbd>[</kbd>: onglet précédent
   <kbd>]</kbd>: onglet suivant
@@ -103,8 +115,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
 ## Global
 
 <pre>
-  <kbd>gg</kbd>: scroll to top
-  <kbd>G</kbd>: scroll to bottom
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>+</kbd>: next screen mode (normal/half/fullscreen)
   <kbd>_</kbd>: prev screen mode
   <kbd>1</kbd>: focus projects panel

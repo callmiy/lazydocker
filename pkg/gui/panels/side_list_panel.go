@@ -22,6 +22,8 @@ type ISideListPanel interface {
 	IsHidden() bool
 	HandleNextLine() error
 	HandlePrevLine() error
+	HandleGotoTop() error
+	HandleGotoBottom() error
 	HandleClick() error
 	HandlePrevMainTab() error
 	HandleNextMainTab() error
@@ -167,6 +169,18 @@ func (self *SideListPanel[T]) HandleNextLine() error {
 
 func (self *SideListPanel[T]) HandlePrevLine() error {
 	self.SelectPrevLine()
+
+	return self.HandleSelect()
+}
+
+func (self *SideListPanel[T]) HandleGotoTop() error {
+	self.SelectFirstLine()
+
+	return self.HandleSelect()
+}
+
+func (self *SideListPanel[T]) HandleGotoBottom() error {
+	self.SelectLastLine()
 
 	return self.HandleSelect()
 }
