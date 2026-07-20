@@ -114,9 +114,10 @@ instead of blindly accepting either side.
 ## Releases and installation
 
 Use fork-specific tags such as `v0.25.2-callmiy.1`, always created from
-`personal`. Do not push a release tag yet: the inherited delivery workflow still
-targets the upstream Homebrew tap and expects upstream-specific credentials. Add
-a fork-owned GoReleaser configuration before publishing the first tag.
+`personal`. Do not push a release tag yet: the inherited delivery workflow is
+gated off in this fork because it targets the upstream Homebrew tap and expects
+upstream-specific credentials. Add a fork-owned GoReleaser configuration before
+publishing the first tag.
 
 Until releases are configured, build the installed binary from `personal`:
 
