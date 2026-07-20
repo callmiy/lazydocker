@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+for command_name in git go mise install; do
+  command -v "$command_name" >/dev/null 2>&1 || {
+    echo "error: required command not found: $command_name" >&2
+    exit 1
+  }
+done
+
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+repo_root=$(git -C "$script_dir/../.." rev-parse --show-toplevel)
+
+remote=${LAZYDOCKER_PERSONAL_REMOTE:-origin}
+branch=${LAZYDOCKER_PERSONAL_BRANCH:-personal}
+mise_version=${LAZYDOCKER_PERSONAL_MISE_VERSION:-personal}
+install_root=${LAZYDOCKER_PERSONAL_INSTALL_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/lazydocker-personal}
+
+git -C "$repo_root" remote get-url "$remote" >/dev/null 2>&1 || {
+  echo "error: git remote not configured: $remote" >&2
+  exit 1
+}
+
+echo "Fetching ${remote}/${branch}..."
+git -C "$repo_root" fetch "$remote" "$branch"
+
+source_ref="refs/remotes/${remote}/${branch}"
+commit=$(git -C "$repo_root" rev-parse --verify "${source_ref}^{commit}")
+short_commit=$(git -C "$repo_root" rev-parse --short=12 "$commit")
+build_date=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+temp_root=$(mktemp -d "${TMPDIR:-/tmp}/lazydocker-personal.XXXXXX")
+worktree="$temp_root/worktree"
+
+cleanup() {
+  if [[ -e $worktree ]]; then
+    git -C "$repo_root" worktree remove --force "$worktree" >/dev/null 2>&1 || true
+  fi
+  rmdir "$temp_root" >/dev/null 2>&1 || true
+}
+trap cleanup EXIT
+
+git -C "$repo_root" worktree add --quiet --detach "$worktree" "$commit"
+
+echo "Building ${remote}/${branch} at ${short_commit}..."
+(
+  cd "$worktree"
+  GOFLAGS=-mod=vendor go build -trimpath \
+    -ldflags="-s -w -X main.version=personal -X main.commit=${commit} -X main.date=${build_date} -X main.buildSource=personalFork" \
+    -o lazydocker-personal .
+)
+
+mkdir -p "$install_root"
+install -m 0755 "$worktree/lazydocker-personal" "$install_root/lazydocker"
+
+mise link --force "lazydocker@${mise_version}" "$install_root"
+mise use --global "lazydocker@${mise_version}"
+
+echo
+echo "Installed ${install_root}/lazydocker"
+"$install_root/lazydocker" --version
+echo
+echo "mise version: lazydocker@${mise_version}"
+echo 'Open a new shell or run: exec "$SHELL" -l'

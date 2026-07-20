@@ -119,12 +119,31 @@ gated off in this fork because it targets the upstream Homebrew tap and expects
 upstream-specific credentials. Add a fork-owned GoReleaser configuration before
 publishing the first tag.
 
-Until releases are configured, build the installed binary from `personal`:
+Until releases are configured, install or update the fork-managed binary with:
 
 ```sh
-git switch personal
-GOFLAGS=-mod=vendor go build -o lazydocker .
+scripts/personal/install
 ```
+
+The installer fetches `origin/personal`, builds that exact commit in a temporary
+detached worktree, installs it under
+`~/.local/share/lazydocker-personal/lazydocker`, links the directory into mise as
+`lazydocker@personal`, and selects that version globally. It does not switch or
+modify the caller's current branch.
+
+Verify the active installation with:
+
+```sh
+lazydocker --version
+mise which lazydocker
+```
+
+After selecting `lazydocker@personal` for the first time, open a new shell or
+run `exec "$SHELL" -l` so mise can refresh the active `PATH`.
+
+The defaults can be overridden with `LAZYDOCKER_PERSONAL_REMOTE`,
+`LAZYDOCKER_PERSONAL_BRANCH`, `LAZYDOCKER_PERSONAL_MISE_VERSION`, and
+`LAZYDOCKER_PERSONAL_INSTALL_DIR`.
 
 Do not change the Go module path merely to install the binary. Retaining
 `github.com/jesseduffield/lazydocker` keeps upstream imports and future merges
