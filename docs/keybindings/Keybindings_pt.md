@@ -8,6 +8,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: editar configuração do lazydocker
   <kbd>o</kbd>: abrir configuração do lazydocker
   <kbd>m</kbd>: ver logs
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focar no painel principal
   <kbd>[</kbd>: aba anterior
   <kbd>]</kbd>: próxima aba
@@ -28,6 +30,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: executar comando personalizado predefinido
   <kbd>b</kbd>: ver comandos em massa
   <kbd>w</kbd>: abrir no navegador (primeira porta é http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focar no painel principal
   <kbd>[</kbd>: aba anterior
   <kbd>]</kbd>: próxima aba
@@ -52,6 +56,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>b</kbd>: ver comandos em massa
   <kbd>E</kbd>: executar shell
   <kbd>w</kbd>: abrir no navegador (primeira porta é http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focar no painel principal
   <kbd>[</kbd>: aba anterior
   <kbd>]</kbd>: próxima aba
@@ -64,6 +70,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: executar comando personalizado predefinido
   <kbd>d</kbd>: remover imagem
   <kbd>b</kbd>: ver comandos em massa
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focar no painel principal
   <kbd>[</kbd>: aba anterior
   <kbd>]</kbd>: próxima aba
@@ -76,6 +84,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: executar comando personalizado predefinido
   <kbd>d</kbd>: remover volume
   <kbd>b</kbd>: ver comandos em massa
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focar no painel principal
   <kbd>[</kbd>: aba anterior
   <kbd>]</kbd>: próxima aba
@@ -88,6 +98,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: executar comando personalizado predefinido
   <kbd>d</kbd>: remover rede
   <kbd>b</kbd>: ver comandos em massa
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focar no painel principal
   <kbd>[</kbd>: aba anterior
   <kbd>]</kbd>: próxima aba
@@ -103,8 +115,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
 ## Global
 
 <pre>
-  <kbd>gg</kbd>: scroll to top
-  <kbd>G</kbd>: scroll to bottom
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>+</kbd>: modo de tela seguinte (normal/meia/tela cheia)
   <kbd>_</kbd>: modo de tela anterior
   <kbd>1</kbd>: focus projects panel

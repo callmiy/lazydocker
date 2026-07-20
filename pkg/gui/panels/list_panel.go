@@ -40,3 +40,11 @@ func (self *ListPanel[T]) SelectNextLine() {
 func (self *ListPanel[T]) SelectPrevLine() {
 	self.moveSelectedLine(-1)
 }
+
+func (self *ListPanel[T]) SelectFirstLine() {
+	self.SetSelectedLineIdx(0)
+}
+
+func (self *ListPanel[T]) SelectLastLine() {
+	self.SetSelectedLineIdx(self.List.Len() - 1)
+}

@@ -8,6 +8,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: lazzydocker ayarlarını düzenle
   <kbd>o</kbd>: lazydocker ayarlarını aç
   <kbd>m</kbd>: kayıt defterini görüntüle
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: ana panele odaklan
   <kbd>[</kbd>: önceki sekme
   <kbd>]</kbd>: sonraki sekme
@@ -28,6 +30,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: önceden tanımlanmış özel komutu çalıştır
   <kbd>b</kbd>: view bulk commands
   <kbd>w</kbd>: open in browser (first port is http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: ana panele odaklan
   <kbd>[</kbd>: önceki sekme
   <kbd>]</kbd>: sonraki sekme
@@ -52,6 +56,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>b</kbd>: view bulk commands
   <kbd>E</kbd>: exec shell
   <kbd>w</kbd>: open in browser (first port is http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: ana panele odaklan
   <kbd>[</kbd>: önceki sekme
   <kbd>]</kbd>: sonraki sekme
@@ -64,6 +70,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: önceden tanımlanmış özel komutu çalıştır
   <kbd>d</kbd>: imajı kaldır
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: ana panele odaklan
   <kbd>[</kbd>: önceki sekme
   <kbd>]</kbd>: sonraki sekme
@@ -76,6 +84,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: önceden tanımlanmış özel komutu çalıştır
   <kbd>d</kbd>: alanı kaldır
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: ana panele odaklan
   <kbd>[</kbd>: önceki sekme
   <kbd>]</kbd>: sonraki sekme
@@ -88,6 +98,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: önceden tanımlanmış özel komutu çalıştır
   <kbd>d</kbd>: ağı kaldır
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: ana panele odaklan
   <kbd>[</kbd>: önceki sekme
   <kbd>]</kbd>: sonraki sekme
@@ -103,8 +115,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
 ## Global
 
 <pre>
-  <kbd>gg</kbd>: scroll to top
-  <kbd>G</kbd>: scroll to bottom
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>+</kbd>: next screen mode (normal/half/fullscreen)
   <kbd>_</kbd>: prev screen mode
   <kbd>1</kbd>: focus projects panel

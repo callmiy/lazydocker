@@ -8,6 +8,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: verander de lazydocker configuratie
   <kbd>o</kbd>: open de lazydocker configuratie
   <kbd>m</kbd>: bekijk logs
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus hoofdpaneel
   <kbd>[</kbd>: vorige tab
   <kbd>]</kbd>: volgende tab
@@ -28,6 +30,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: draai een vooraf bedacht aangepaste opdracht
   <kbd>b</kbd>: view bulk commands
   <kbd>w</kbd>: open in browser (first port is http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus hoofdpaneel
   <kbd>[</kbd>: vorige tab
   <kbd>]</kbd>: volgende tab
@@ -52,6 +56,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>b</kbd>: view bulk commands
   <kbd>E</kbd>: exec shell
   <kbd>w</kbd>: open in browser (first port is http)
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus hoofdpaneel
   <kbd>[</kbd>: vorige tab
   <kbd>]</kbd>: volgende tab
@@ -64,6 +70,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: draai een vooraf bedacht aangepaste opdracht
   <kbd>d</kbd>: verwijder image
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus hoofdpaneel
   <kbd>[</kbd>: vorige tab
   <kbd>]</kbd>: volgende tab
@@ -76,6 +84,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: draai een vooraf bedacht aangepaste opdracht
   <kbd>d</kbd>: verwijder volume
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus hoofdpaneel
   <kbd>[</kbd>: vorige tab
   <kbd>]</kbd>: volgende tab
@@ -88,6 +98,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>c</kbd>: draai een vooraf bedacht aangepaste opdracht
   <kbd>d</kbd>: verwijder network
   <kbd>b</kbd>: view bulk commands
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus hoofdpaneel
   <kbd>[</kbd>: vorige tab
   <kbd>]</kbd>: volgende tab
@@ -103,8 +115,8 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
 ## Globaal
 
 <pre>
-  <kbd>gg</kbd>: scroll to top
-  <kbd>G</kbd>: scroll to bottom
+  <kbd>gg</kbd>: go to top
+  <kbd>G</kbd>: go to bottom
   <kbd>+</kbd>: next screen mode (normal/half/fullscreen)
   <kbd>_</kbd>: prev screen mode
   <kbd>1</kbd>: focus projects panel
