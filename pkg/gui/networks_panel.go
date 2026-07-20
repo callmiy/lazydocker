@@ -165,14 +165,15 @@ func (gui *Gui) handleNetworksCustomCommand(g *gocui.Gui, v *gocui.View) error {
 }
 
 func (gui *Gui) handleNetworksBulkCommand(g *gocui.Gui, v *gocui.View) error {
-	baseBulkCommands := []config.CustomCommand{
-		{
+	bulkCommands := make([]config.CustomCommand, 0, 1+len(gui.Config.UserConfig.BulkCommands.Networks))
+	bulkCommands = append(bulkCommands,
+		config.CustomCommand{
 			Name:             gui.Tr.PruneNetworks,
 			InternalFunction: gui.handlePruneNetworks,
 		},
-	}
+	)
 
-	bulkCommands := append(baseBulkCommands, gui.Config.UserConfig.BulkCommands.Networks...)
+	bulkCommands = append(bulkCommands, gui.Config.UserConfig.BulkCommands.Networks...)
 	commandObject := gui.DockerCommand.NewCommandObject(commands.CommandObject{})
 
 	return gui.createBulkCommandMenu(bulkCommands, commandObject)

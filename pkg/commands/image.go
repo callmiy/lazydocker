@@ -84,8 +84,9 @@ func (i *Image) RenderHistory() (string, error) {
 		return getHistoryResponseItemDisplayStrings(layer)
 	})
 
-	headers := [][]string{{"ID", "TAG", "SIZE", "COMMAND"}}
-	table := append(headers, tableBody...)
+	table := make([][]string, 1, 1+len(tableBody))
+	table[0] = []string{"ID", "TAG", "SIZE", "COMMAND"}
+	table = append(table, tableBody...)
 
 	return utils.RenderTable(table)
 }

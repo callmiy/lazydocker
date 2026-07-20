@@ -1,8 +1,8 @@
+version: "2"
+
 linters:
   enable:
-    - gofumpt
     - thelper
-    - goimports
     - tparallel
     - wastedassign
     - unparam
@@ -12,16 +12,41 @@ linters:
     - makezero
     - nakedret
     # - goconst # TODO: enable and fix issues
-  fast: false
+  settings:
+    exhaustive:
+      default-signifies-exhaustive: true
 
-linters-settings:
-  exhaustive:
-    default-signifies-exhaustive: true
+    nakedret:
+      # the gods will judge me but I just don't like naked returns at all
+      max-func-lines: 0
+    staticcheck:
+      # Preserve bug-focused checks; leave stylistic and quick-fix debt for separate cleanup.
+      checks:
+        - all
+        - "-QF*"
+        - "-ST*"
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
 
-  nakedret:
-    # the gods will judge me but I just don't like naked returns at all
-    max-func-lines: 0
+formatters:
+  enable:
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
 
 run:
   go: '1.21'
-  timeout: 10m
