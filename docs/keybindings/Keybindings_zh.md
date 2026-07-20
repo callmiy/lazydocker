@@ -98,13 +98,13 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
 
 <pre>
   <kbd>esc</kbd>: 返回
-  <kbd>g</kbd>: scroll to top
-  <kbd>G</kbd>: scroll to bottom
 </pre>
 
 ## 全局
 
 <pre>
+  <kbd>gg</kbd>: scroll to top
+  <kbd>G</kbd>: scroll to bottom
   <kbd>+</kbd>: 下一个屏幕模式（正常/半屏/全屏）
   <kbd>_</kbd>: 上一个屏幕模式
   <kbd>1</kbd>: focus projects panel

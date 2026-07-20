@@ -9,12 +9,13 @@ import (
 
 // gPressTimeout is the window within which two consecutive 'g' presses are
 // treated as the vim-style "gg" command to jump to the top of the main panel.
-const gPressTimeout = 250 * time.Millisecond
+const gPressTimeout = time.Second
 
 // isDoublePress reports whether `now` follows `previous` closely enough to be
 // considered the second half of a double key press.
 func isDoublePress(previous, now time.Time, timeout time.Duration) bool {
-	return !previous.IsZero() && now.Sub(previous) <= timeout
+	elapsed := now.Sub(previous)
+	return !previous.IsZero() && elapsed >= 0 && elapsed <= timeout
 }
 
 // gotoBottomOriginY returns the vertical origin that scrolls the main panel to
@@ -113,6 +114,8 @@ func (gui *Gui) gotoTopMain(g *gocui.Gui, v *gocui.View) error {
 // gotoBottomMain implements the vim-style "G" command, jumping to the bottom of
 // the main panel.
 func (gui *Gui) gotoBottomMain(g *gocui.Gui, v *gocui.View) error {
+	gui.State.lastGPressedAt = time.Time{}
+
 	mainView := gui.Views.Main
 	mainView.Autoscroll = false
 
