@@ -49,8 +49,14 @@ func (gui *Gui) getVolumesPanel() *panels.SideListPanel[*commands.Volume] {
 			}
 			return a.Name < b.Name
 		},
-		GetTableCells: presentation.GetVolumeDisplayStrings,
+		GetTableCells:            presentation.GetVolumeDisplayStrings,
+		GetFilterIdentityStrings: volumeFilterIdentityStrings,
+		GetItemKey:               func(volume *commands.Volume) string { return volume.Name },
 	}
+}
+
+func volumeFilterIdentityStrings(volume *commands.Volume) []string {
+	return []string{volume.Name}
 }
 
 func (gui *Gui) renderVolumeConfig(volume *commands.Volume) tasks.TaskFunc {

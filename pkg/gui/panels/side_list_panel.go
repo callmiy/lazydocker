@@ -56,6 +56,13 @@ type SideListPanel[T comparable] struct {
 	// be rendered with padding.
 	GetTableCells func(T) []string
 
+	// returns the names and identifiers that support typo-tolerant matching.
+	GetFilterIdentityStrings func(T) []string
+
+	// returns a stable key used to preserve selection when refreshed items are
+	// represented by new objects.
+	GetItemKey func(T) string
+
 	// function to be called after re-rendering list. Can be nil
 	OnRerender func() error
 
@@ -214,12 +221,35 @@ func (self *SideListPanel[T]) Refocus() {
 }
 
 func (self *SideListPanel[T]) SetItems(items []T) {
+	selection := self.currentSelection()
 	self.List.SetItems(items)
-	self.FilterAndSort()
+	self.filterAndSort(selection)
 }
 
 func (self *SideListPanel[T]) FilterAndSort() {
+	self.filterAndSort(self.currentSelection())
+}
+
+type panelSelection[T comparable] struct {
+	item   T
+	key    string
+	exists bool
+	hasKey bool
+}
+
+func (self *SideListPanel[T]) currentSelection() panelSelection[T] {
+	item, exists := self.List.TryGet(self.SelectedIdx)
+	selection := panelSelection[T]{item: item, exists: exists}
+	if exists && self.GetItemKey != nil {
+		selection.key = self.GetItemKey(item)
+		selection.hasKey = true
+	}
+	return selection
+}
+
+func (self *SideListPanel[T]) filterAndSort(selection panelSelection[T]) {
 	filterString := self.Gui.FilterString(self.View)
+	filterScores := map[T]filterItemScore{}
 
 	self.List.Filter(func(item T, index int) bool {
 		if self.Filter != nil && !self.Filter(item) {
@@ -235,15 +265,53 @@ func (self *SideListPanel[T]) FilterAndSort() {
 		}
 
 		if filterString != "" {
-			return lo.SomeBy(self.GetTableCells(item), func(searchString string) bool {
-				return containsCaseInsensitive(searchString, filterString)
-			})
+			identityStrings := []string{}
+			if self.GetFilterIdentityStrings != nil {
+				identityStrings = self.GetFilterIdentityStrings(item)
+			}
+
+			score, matches := matchFilterQuery(filterString, self.GetTableCells(item), identityStrings)
+			if matches {
+				filterScores[item] = score
+			}
+			return matches
 		}
 
 		return true
 	})
 
-	self.List.Sort(self.Sort)
+	self.List.Sort(func(a, b T) bool {
+		if filterString != "" {
+			if comparison := compareFilterItemScores(filterScores[a], filterScores[b]); comparison != 0 {
+				return comparison < 0
+			}
+		}
+
+		return self.Sort != nil && self.Sort(a, b)
+	})
+
+	if filterString != "" {
+		if selection.exists {
+			selectedItemIdx := -1
+			if selection.hasKey {
+				for index, item := range self.List.GetItems() {
+					if self.GetItemKey(item) == selection.key {
+						selectedItemIdx = index
+						break
+					}
+				}
+			} else {
+				selectedItemIdx = self.List.GetIndex(selection.item)
+			}
+
+			if selectedItemIdx >= 0 {
+				self.SetSelectedLineIdx(selectedItemIdx)
+				return
+			}
+		}
+		self.SetSelectedLineIdx(0)
+		return
+	}
 
 	self.clampSelectedLineIdx()
 }

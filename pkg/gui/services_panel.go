@@ -3,6 +3,7 @@ package gui
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/fatih/color"
@@ -89,10 +90,22 @@ func (gui *Gui) getServicesPanel() *panels.SideListPanel[*commands.Service] {
 		GetTableCells: func(service *commands.Service) []string {
 			return presentation.GetServiceDisplayStrings(&gui.Config.UserConfig.Gui, service)
 		},
+		GetFilterIdentityStrings: serviceFilterIdentityStrings,
+		GetItemKey: func(service *commands.Service) string {
+			return service.ProjectName + "\x00" + service.Name
+		},
 		Hide: func() bool {
 			return !gui.DockerCommand.IsProjectScoped()
 		},
 	}
+}
+
+func serviceFilterIdentityStrings(service *commands.Service) []string {
+	identities := []string{service.Name}
+	if service.Container != nil {
+		identities = append(identities, strings.TrimPrefix(service.Container.Container.Image, "sha256:"))
+	}
+	return identities
 }
 
 func (gui *Gui) renderServiceContainerConfig(service *commands.Service) tasks.TaskFunc {

@@ -119,6 +119,16 @@ func (gui *Gui) getContainersPanel() *panels.SideListPanel[*commands.Container] 
 		GetTableCells: func(container *commands.Container) []string {
 			return presentation.GetContainerDisplayStrings(&gui.Config.UserConfig.Gui, container)
 		},
+		GetFilterIdentityStrings: containerFilterIdentityStrings,
+		GetItemKey:               func(container *commands.Container) string { return container.ID },
+	}
+}
+
+func containerFilterIdentityStrings(container *commands.Container) []string {
+	return []string{
+		container.Name,
+		container.ID,
+		strings.TrimPrefix(container.Container.Image, "sha256:"),
 	}
 }
 

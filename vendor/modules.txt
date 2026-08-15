@@ -155,6 +155,11 @@ github.com/goccy/go-yaml/token
 # github.com/gookit/color v1.5.0
 ## explicit; go 1.13
 github.com/gookit/color
+# github.com/hbollon/go-edlib v1.7.0
+## explicit; go 1.13
+github.com/hbollon/go-edlib
+github.com/hbollon/go-edlib/internal/orderedmap
+github.com/hbollon/go-edlib/internal/utils
 # github.com/imdario/mergo v0.3.16
 ## explicit; go 1.13
 github.com/imdario/mergo

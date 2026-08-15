@@ -46,8 +46,10 @@ func (gui *Gui) getProjectPanel() *panels.SideListPanel[*commands.Project] {
 			List: panels.NewFilteredList[*commands.Project](),
 			View: gui.Views.Project,
 		},
-		NoItemsMessage: "",
-		Gui:            gui.intoInterface(),
+		NoItemsMessage:           "",
+		Gui:                      gui.intoInterface(),
+		GetFilterIdentityStrings: projectFilterIdentityStrings,
+		GetItemKey:               func(project *commands.Project) string { return project.Name },
 
 		Sort: func(a *commands.Project, b *commands.Project) bool {
 			return a.Name < b.Name
@@ -62,6 +64,10 @@ func (gui *Gui) getProjectPanel() *panels.SideListPanel[*commands.Project] {
 			return !gui.DockerCommand.IsProjectScoped()
 		},
 	}
+}
+
+func projectFilterIdentityStrings(project *commands.Project) []string {
+	return []string{project.Name}
 }
 
 func (gui *Gui) refreshProject() error {

@@ -13,6 +13,7 @@ require (
 	github.com/fatih/color v1.10.0
 	github.com/go-errors/errors v1.5.1
 	github.com/gookit/color v1.5.0
+	github.com/hbollon/go-edlib v1.7.0
 	github.com/imdario/mergo v0.3.16
 	github.com/integrii/flaggy v1.4.0
 	github.com/jesseduffield/asciigraph v0.0.0-20190605104717-6d88e39309ee
