@@ -90,7 +90,7 @@ func (gui *Gui) getServicesPanel() *panels.SideListPanel[*commands.Service] {
 		GetTableCells: func(service *commands.Service) []string {
 			return presentation.GetServiceDisplayStrings(&gui.Config.UserConfig.Gui, service)
 		},
-		GetFilterIdentityStrings: serviceFilterIdentityStrings,
+		GetFilterIdentities: serviceFilterIdentities,
 		GetItemKey: func(service *commands.Service) string {
 			return service.ProjectName + "\x00" + service.Name
 		},
@@ -100,10 +100,13 @@ func (gui *Gui) getServicesPanel() *panels.SideListPanel[*commands.Service] {
 	}
 }
 
-func serviceFilterIdentityStrings(service *commands.Service) []string {
-	identities := []string{service.Name}
+func serviceFilterIdentities(service *commands.Service) []panels.FilterIdentity {
+	identities := []panels.FilterIdentity{{Value: service.Name, DisplayCell: 2}}
 	if service.Container != nil {
-		identities = append(identities, strings.TrimPrefix(service.Container.Container.Image, "sha256:"))
+		identities = append(identities, panels.FilterIdentity{
+			Value:       strings.TrimPrefix(service.Container.Container.Image, "sha256:"),
+			DisplayCell: 5,
+		})
 	}
 	return identities
 }

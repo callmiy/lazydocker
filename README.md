@@ -273,7 +273,8 @@ echo "alias lzd='lazydocker'" >> ~/.zshrc
   [here](/docs/keybindings).
 - Press `/` in the projects, services, containers, images, volumes, or networks
   panel to filter it. Filtering is case-insensitive, supports ordered-letter
-  abbreviations and typos, and accepts multiple space-separated terms.
+  abbreviations and typos, accepts multiple space-separated terms, and
+  highlights the text responsible for each match.
 
 ## Cool features
 

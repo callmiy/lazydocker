@@ -46,10 +46,10 @@ func (gui *Gui) getProjectPanel() *panels.SideListPanel[*commands.Project] {
 			List: panels.NewFilteredList[*commands.Project](),
 			View: gui.Views.Project,
 		},
-		NoItemsMessage:           "",
-		Gui:                      gui.intoInterface(),
-		GetFilterIdentityStrings: projectFilterIdentityStrings,
-		GetItemKey:               func(project *commands.Project) string { return project.Name },
+		NoItemsMessage:      "",
+		Gui:                 gui.intoInterface(),
+		GetFilterIdentities: projectFilterIdentities,
+		GetItemKey:          func(project *commands.Project) string { return project.Name },
 
 		Sort: func(a *commands.Project, b *commands.Project) bool {
 			return a.Name < b.Name
@@ -66,8 +66,8 @@ func (gui *Gui) getProjectPanel() *panels.SideListPanel[*commands.Project] {
 	}
 }
 
-func projectFilterIdentityStrings(project *commands.Project) []string {
-	return []string{project.Name}
+func projectFilterIdentities(project *commands.Project) []panels.FilterIdentity {
+	return []panels.FilterIdentity{{Value: project.Name, DisplayCell: 0}}
 }
 
 func (gui *Gui) refreshProject() error {

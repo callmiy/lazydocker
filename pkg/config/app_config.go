@@ -72,6 +72,7 @@ type ThemeConfig struct {
 	InactiveBorderColor []string `yaml:"inactiveBorderColor,omitempty"`
 	SelectedLineBgColor []string `yaml:"selectedLineBgColor,omitempty"`
 	OptionsTextColor    []string `yaml:"optionsTextColor,omitempty"`
+	FilterMatchStyle    []string `yaml:"filterMatchStyle,omitempty"`
 }
 
 // GuiConfig is for configuring visual things like colors and whether we show or
@@ -367,6 +368,7 @@ func GetDefaultConfig() UserConfig {
 				InactiveBorderColor: []string{"default"},
 				SelectedLineBgColor: []string{"blue"},
 				OptionsTextColor:    []string{"blue"},
+				FilterMatchStyle:    []string{"underline"},
 			},
 			ShowAllContainers:          false,
 			ReturnImmediately:          false,

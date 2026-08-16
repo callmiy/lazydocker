@@ -78,3 +78,7 @@ func (gui *Gui) commitFilter() error {
 func (gui *Gui) filterPrompt() string {
 	return fmt.Sprintf("%s: ", gui.Tr.FilterPrompt)
 }
+
+func (gui *Gui) FilterMatchStyle() []string {
+	return gui.Config.UserConfig.Gui.Theme.FilterMatchStyle
+}

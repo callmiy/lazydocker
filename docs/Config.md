@@ -44,6 +44,10 @@ gui:
       - blue
     optionsTextColor:
       - blue
+    # Style applied to text that matches the active list filter.
+    # Set this to an empty list to disable match highlighting.
+    filterMatchStyle:
+      - underline
   returnImmediately: false
   wrapMainPanel: true
   # Side panel width as a ratio of the screen's width
@@ -114,6 +118,12 @@ The available attributes are:
 - bold
 - reverse # useful for high-contrast
 - underline
+
+`gui.theme.filterMatchStyle` accepts the same attributes. Match attributes are
+layered over existing cell colors and restored after the matching text. For
+example, `[yellow, bold]` temporarily colors matching text yellow and bold,
+and quoted hex colors such as `["#ffcc00", underline]` are also supported.
+An empty list (`[]`) disables match highlighting without disabling filtering.
 
 ## Custom Commands
 

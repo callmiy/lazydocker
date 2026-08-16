@@ -2,10 +2,28 @@ package config
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/jesseduffield/yaml"
+	"github.com/stretchr/testify/assert"
 )
+
+func TestFilterMatchStyleDefaultsAndCanBeDisabled(t *testing.T) {
+	assert.Equal(t, []string{"underline"}, GetDefaultConfig().Gui.Theme.FilterMatchStyle)
+
+	configDir := t.TempDir()
+	err := os.WriteFile(
+		filepath.Join(configDir, "config.yml"),
+		[]byte("gui:\n  theme:\n    filterMatchStyle: []\n"),
+		0o600,
+	)
+	assert.NoError(t, err)
+
+	config, err := loadUserConfigWithDefaults(configDir)
+	assert.NoError(t, err)
+	assert.Empty(t, config.Gui.Theme.FilterMatchStyle)
+}
 
 func TestDockerComposeCommandNoFiles(t *testing.T) {
 	composeFiles := []string{}

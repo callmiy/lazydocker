@@ -142,7 +142,7 @@ func TestMatchFilterQuery(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			score, matches := matchFilterQuery(test.query, test.displayed, test.identities)
+			score, matches := matchFilterQuery(test.query, test.displayed, visibleTestIdentities(test.identities...))
 			assert.Equal(t, test.matches, matches)
 			if !test.matches {
 				return
@@ -158,23 +158,23 @@ func TestMatchFilterQuery(t *testing.T) {
 }
 
 func TestFilterScoreRanking(t *testing.T) {
-	exactIdentity, ok := matchFilterQuery("scheduling", []string{"running", "scheduling"}, []string{"scheduling"})
+	exactIdentity, ok := matchFilterQuery("scheduling", []string{"running", "scheduling"}, visibleTestIdentities("scheduling"))
 	if !assert.True(t, ok) {
 		return
 	}
-	exactSecondary, ok := matchFilterQuery("running", []string{"running", "scheduler"}, []string{"scheduler"})
+	exactSecondary, ok := matchFilterQuery("running", []string{"running", "scheduler"}, visibleTestIdentities("scheduler"))
 	if !assert.True(t, ok) {
 		return
 	}
-	missingLetterIdentity, ok := matchFilterQuery("schedling", []string{"running", "scheduling"}, []string{"scheduling"})
+	missingLetterIdentity, ok := matchFilterQuery("schedling", []string{"running", "scheduling"}, visibleTestIdentities("scheduling"))
 	if !assert.True(t, ok) {
 		return
 	}
-	subsequenceIdentity, ok := matchFilterQuery("schdl", []string{"running", "scheduling"}, []string{"scheduling"})
+	subsequenceIdentity, ok := matchFilterQuery("schdl", []string{"running", "scheduling"}, visibleTestIdentities("scheduling"))
 	if !assert.True(t, ok) {
 		return
 	}
-	typoIdentity, ok := matchFilterQuery("schxl", []string{"running", "schel"}, []string{"schel"})
+	typoIdentity, ok := matchFilterQuery("schxl", []string{"running", "schel"}, visibleTestIdentities("schel"))
 	if !assert.True(t, ok) {
 		return
 	}
@@ -183,6 +183,99 @@ func TestFilterScoreRanking(t *testing.T) {
 	assert.Negative(t, compareFilterItemScores(exactSecondary, subsequenceIdentity))
 	assert.Negative(t, compareFilterItemScores(subsequenceIdentity, typoIdentity))
 	assert.Equal(t, subsequenceIdentityMatch, missingLetterIdentity.terms[0].class)
+}
+
+func TestFilterMatchHighlightPositions(t *testing.T) {
+	tests := []struct {
+		name              string
+		query             string
+		displayed         []string
+		identities        []FilterIdentity
+		expectedClass     filterMatchClass
+		expectedCell      int
+		expectedPositions []int
+	}{
+		{
+			name:              "exact identity uses unicode rune positions",
+			query:             "RÉSEAU",
+			displayed:         []string{"", "xxRéseauyy"},
+			identities:        []FilterIdentity{{Value: "xxRéseauyy", DisplayCell: 1}},
+			expectedClass:     exactIdentityMatch,
+			expectedCell:      1,
+			expectedPositions: []int{2, 3, 4, 5, 6, 7},
+		},
+		{
+			name:              "exact secondary field ignores ansi sequences",
+			query:             "mag",
+			displayed:         []string{"\x1b[35mimage\x1b[0m"},
+			expectedClass:     exactSecondaryMatch,
+			expectedCell:      0,
+			expectedPositions: []int{1, 2, 3},
+		},
+		{
+			name:              "subsequence records contributing letters only",
+			query:             "schdl",
+			displayed:         []string{"scheduling"},
+			identities:        []FilterIdentity{{Value: "scheduling", DisplayCell: 0}},
+			expectedClass:     subsequenceIdentityMatch,
+			expectedCell:      0,
+			expectedPositions: []int{0, 1, 2, 4, 6},
+		},
+		{
+			name:              "typo records the whole best region",
+			query:             "scehduling",
+			displayed:         []string{"scheduling"},
+			identities:        []FilterIdentity{{Value: "scheduling", DisplayCell: 0}},
+			expectedClass:     fuzzyIdentityMatch,
+			expectedCell:      0,
+			expectedPositions: []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+		},
+		{
+			name:              "hidden identity retains non-renderable cell",
+			query:             "abc123",
+			displayed:         []string{"image-name"},
+			identities:        []FilterIdentity{{Value: "abc123", DisplayCell: HiddenFilterIdentityCell}},
+			expectedClass:     exactIdentityMatch,
+			expectedCell:      HiddenFilterIdentityCell,
+			expectedPositions: []int{0, 1, 2, 3, 4, 5},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			score, matches := matchFilterQuery(test.query, test.displayed, test.identities)
+			if !assert.True(t, matches) || !assert.Len(t, score.terms, 1) {
+				return
+			}
+			assert.Equal(t, test.expectedClass, score.terms[0].class)
+			assert.Equal(t, test.expectedCell, score.terms[0].match.displayCell)
+			assert.Equal(t, test.expectedPositions, score.terms[0].match.runeIndexes)
+		})
+	}
+}
+
+func TestFilterMatchUsesBestOccurrenceForEachTerm(t *testing.T) {
+	score, matches := matchFilterQuery(
+		"api sched",
+		[]string{"xapi", "api-client", "scheduler"},
+		[]FilterIdentity{
+			{Value: "xapi", DisplayCell: 0},
+			{Value: "api-client", DisplayCell: 1},
+			{Value: "scheduler", DisplayCell: 2},
+		},
+	)
+	if !assert.True(t, matches) || !assert.Len(t, score.terms, 2) {
+		return
+	}
+
+	matchesByCell := map[int][]int{}
+	for _, term := range score.terms {
+		matchesByCell[term.match.displayCell] = term.match.runeIndexes
+	}
+	assert.Equal(t, map[int][]int{
+		1: {0, 1, 2},
+		2: {0, 1, 2, 3, 4},
+	}, matchesByCell)
 }
 
 func BenchmarkBestFuzzyRegion(b *testing.B) {
@@ -218,8 +311,10 @@ func TestSetItemsPreservesSelectionByStableKeyDuringActiveFilter(t *testing.T) {
 		GetTableCells: func(item *filterTestItem) []string {
 			return []string{"running", item.value}
 		},
-		GetFilterIdentityStrings: func(item *filterTestItem) []string { return []string{item.value} },
-		GetItemKey:               func(item *filterTestItem) string { return item.key },
+		GetFilterIdentities: func(item *filterTestItem) []FilterIdentity {
+			return visibleTestIdentities(item.value)
+		},
+		GetItemKey: func(item *filterTestItem) string { return item.key },
 	}
 
 	selectedItem := &filterTestItem{key: "selected", value: "scheduling"}
@@ -260,8 +355,8 @@ func newFilterTestPanel(gui *filterTestGui) *SideListPanel[string] {
 		GetTableCells: func(item string) []string {
 			return []string{"running", item}
 		},
-		GetFilterIdentityStrings: func(item string) []string { return []string{item} },
-		GetItemKey:               func(item string) string { return item },
+		GetFilterIdentities: func(item string) []FilterIdentity { return visibleTestIdentities(item) },
+		GetItemKey:          func(item string) string { return item },
 	}
 }
 
@@ -284,6 +379,15 @@ func (self *filterTestGui) ShouldRefresh(string) bool             { return false
 func (self *filterTestGui) GetMainView() *gocui.View              { return nil }
 func (self *filterTestGui) IsCurrentView(*gocui.View) bool        { return false }
 func (self *filterTestGui) FilterString(*gocui.View) string       { return self.query }
+func (self *filterTestGui) FilterMatchStyle() []string            { return []string{"underline"} }
 func (self *filterTestGui) IgnoreStrings() []string               { return self.ignore }
 func (self *filterTestGui) Update(update func() error)            { _ = update() }
 func (self *filterTestGui) QueueTask(func(context.Context)) error { return nil }
+
+func visibleTestIdentities(values ...string) []FilterIdentity {
+	identities := make([]FilterIdentity, len(values))
+	for index, value := range values {
+		identities[index] = FilterIdentity{Value: value, DisplayCell: 0}
+	}
+	return identities
+}

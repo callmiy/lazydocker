@@ -61,16 +61,20 @@ func (gui *Gui) getImagesPanel() *panels.SideListPanel[*commands.Image] {
 
 			return a.ID < b.ID
 		},
-		GetTableCells:            presentation.GetImageDisplayStrings,
-		GetFilterIdentityStrings: imageFilterIdentityStrings,
+		GetTableCells:       presentation.GetImageDisplayStrings,
+		GetFilterIdentities: imageFilterIdentities,
 		GetItemKey: func(image *commands.Image) string {
 			return image.ID + "\x00" + image.Name + "\x00" + image.Tag
 		},
 	}
 }
 
-func imageFilterIdentityStrings(image *commands.Image) []string {
-	return []string{image.Name, image.Tag, strings.TrimPrefix(image.ID, "sha256:")}
+func imageFilterIdentities(image *commands.Image) []panels.FilterIdentity {
+	return []panels.FilterIdentity{
+		{Value: image.Name, DisplayCell: 0},
+		{Value: image.Tag, DisplayCell: 1},
+		{Value: strings.TrimPrefix(image.ID, "sha256:"), DisplayCell: panels.HiddenFilterIdentityCell},
+	}
 }
 
 func (gui *Gui) renderImageConfigTask(image *commands.Image) tasks.TaskFunc {

@@ -160,7 +160,7 @@ func RenderTable(rows [][]string) (string, error) {
 
 // Decolorise strips a string of color
 func Decolorise(str string) string {
-	re := regexp.MustCompile(`\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mK]`)
+	re := regexp.MustCompile(`\x1B\[[0-9;]*[mK]`)
 	return re.ReplaceAllString(str, "")
 }
 

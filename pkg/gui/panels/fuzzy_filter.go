@@ -6,7 +6,27 @@ import (
 	"unicode/utf8"
 
 	edlib "github.com/hbollon/go-edlib"
+	"github.com/jesseduffield/lazydocker/pkg/utils"
 )
+
+const HiddenFilterIdentityCell = -1
+
+// FilterIdentity describes a typo-tolerant value and the table cell that
+// displays it. Hidden identities remain searchable but cannot be highlighted.
+type FilterIdentity struct {
+	Value       string
+	DisplayCell int
+}
+
+type filterField struct {
+	value       string
+	displayCell int
+}
+
+type filterMatch struct {
+	displayCell int
+	runeIndexes []int
+}
 
 type filterMatchClass int
 
@@ -22,6 +42,7 @@ type filterTermScore struct {
 	distance int
 	start    int
 	extra    int
+	match    filterMatch
 }
 
 type filterItemScore struct {
@@ -32,10 +53,19 @@ type filterItemScore struct {
 	totalExtra    int
 }
 
-func matchFilterQuery(query string, displayedFields, identityFields []string) (filterItemScore, bool) {
+func matchFilterQuery(query string, displayedCells []string, identities []FilterIdentity) (filterItemScore, bool) {
 	terms := strings.Fields(strings.ToLower(query))
 	if len(terms) == 0 {
 		return filterItemScore{}, true
+	}
+
+	displayedFields := make([]filterField, len(displayedCells))
+	for index, cell := range displayedCells {
+		displayedFields[index] = filterField{value: utils.Decolorise(cell), displayCell: index}
+	}
+	identityFields := make([]filterField, len(identities))
+	for index, identity := range identities {
+		identityFields[index] = filterField{value: identity.Value, displayCell: identity.DisplayCell}
 	}
 
 	score := filterItemScore{terms: make([]filterTermScore, 0, len(terms))}
@@ -61,7 +91,7 @@ func matchFilterQuery(query string, displayedFields, identityFields []string) (f
 	return score, true
 }
 
-func matchFilterTerm(term string, displayedFields, identityFields []string) (filterTermScore, bool) {
+func matchFilterTerm(term string, displayedFields, identityFields []filterField) (filterTermScore, bool) {
 	if score, ok := bestExactMatch(term, identityFields, exactIdentityMatch); ok {
 		return score, true
 	}
@@ -85,7 +115,8 @@ func matchFilterTerm(term string, displayedFields, identityFields []string) (fil
 	best := filterTermScore{}
 	found := false
 	for _, field := range identityFields {
-		candidate, ok := bestFuzzyRegion(term, strings.ToLower(field), maxEdits)
+		candidate, ok := bestFuzzyRegion(term, strings.ToLower(field.value), maxEdits)
+		candidate.match.displayCell = field.displayCell
 		if ok && (!found || compareFilterTermScores(candidate, best) < 0) {
 			best = candidate
 			found = true
@@ -95,7 +126,7 @@ func matchFilterTerm(term string, displayedFields, identityFields []string) (fil
 	return best, found
 }
 
-func bestSubsequenceMatch(term string, fields []string) (filterTermScore, bool) {
+func bestSubsequenceMatch(term string, fields []filterField) (filterTermScore, bool) {
 	termRunes := []rune(term)
 	if len(termRunes) == 0 {
 		return filterTermScore{}, false
@@ -104,7 +135,7 @@ func bestSubsequenceMatch(term string, fields []string) (filterTermScore, bool) 
 	best := filterTermScore{}
 	found := false
 	for _, field := range fields {
-		fieldRunes := []rune(strings.ToLower(field))
+		fieldRunes := []rune(strings.ToLower(field.value))
 		for start, character := range fieldRunes {
 			if character != termRunes[0] {
 				continue
@@ -112,8 +143,10 @@ func bestSubsequenceMatch(term string, fields []string) (filterTermScore, bool) 
 
 			termIndex := 1
 			end := start
+			matchedRuneIndexes := []int{start}
 			for fieldIndex := start + 1; fieldIndex < len(fieldRunes) && termIndex < len(termRunes); fieldIndex++ {
 				if fieldRunes[fieldIndex] == termRunes[termIndex] {
+					matchedRuneIndexes = append(matchedRuneIndexes, fieldIndex)
 					termIndex++
 					end = fieldIndex
 				}
@@ -128,6 +161,10 @@ func bestSubsequenceMatch(term string, fields []string) (filterTermScore, bool) 
 				distance: span - len(termRunes),
 				start:    start,
 				extra:    len(fieldRunes) - span,
+				match: filterMatch{
+					displayCell: field.displayCell,
+					runeIndexes: matchedRuneIndexes,
+				},
 			}
 			if !found || compareFilterTermScores(candidate, best) < 0 {
 				best = candidate
@@ -139,20 +176,25 @@ func bestSubsequenceMatch(term string, fields []string) (filterTermScore, bool) 
 	return best, found
 }
 
-func bestExactMatch(term string, fields []string, class filterMatchClass) (filterTermScore, bool) {
+func bestExactMatch(term string, fields []filterField, class filterMatchClass) (filterTermScore, bool) {
 	best := filterTermScore{}
 	found := false
 	for _, field := range fields {
-		normalizedField := strings.ToLower(field)
+		normalizedField := strings.ToLower(field.value)
 		byteIndex := strings.Index(normalizedField, term)
 		if byteIndex == -1 {
 			continue
 		}
 
+		start := utf8.RuneCountInString(normalizedField[:byteIndex])
 		candidate := filterTermScore{
 			class: class,
-			start: utf8.RuneCountInString(normalizedField[:byteIndex]),
+			start: start,
 			extra: utf8.RuneCountInString(normalizedField) - utf8.RuneCountInString(term),
+			match: filterMatch{
+				displayCell: field.displayCell,
+				runeIndexes: contiguousRuneIndexes(start, utf8.RuneCountInString(term)),
+			},
 		}
 		if !found || compareFilterTermScores(candidate, best) < 0 {
 			best = candidate
@@ -195,6 +237,9 @@ func bestFuzzyRegion(term, field string, maxEdits int) (filterTermScore, bool) {
 				distance: distance,
 				start:    start,
 				extra:    abs(length - len(termRunes)),
+				match: filterMatch{
+					runeIndexes: contiguousRuneIndexes(start, length),
+				},
 			}
 			if !found || compareFilterTermScores(candidate, best) < 0 {
 				best = candidate
@@ -204,6 +249,14 @@ func bestFuzzyRegion(term, field string, maxEdits int) (filterTermScore, bool) {
 	}
 
 	return best, found
+}
+
+func contiguousRuneIndexes(start, length int) []int {
+	indexes := make([]int, length)
+	for offset := range length {
+		indexes[offset] = start + offset
+	}
+	return indexes
 }
 
 // canMatchWithinEdits calculates a lower bound from character counts. A

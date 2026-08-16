@@ -56,8 +56,9 @@ type SideListPanel[T comparable] struct {
 	// be rendered with padding.
 	GetTableCells func(T) []string
 
-	// returns the names and identifiers that support typo-tolerant matching.
-	GetFilterIdentityStrings func(T) []string
+	// returns the names and identifiers that support typo-tolerant matching,
+	// along with the table cell where each visible identity is rendered.
+	GetFilterIdentities func(T) []FilterIdentity
 
 	// returns a stable key used to preserve selection when refreshed items are
 	// represented by new objects.
@@ -87,6 +88,7 @@ type IGui interface {
 	GetMainView() *gocui.View
 	IsCurrentView(*gocui.View) bool
 	FilterString(view *gocui.View) string
+	FilterMatchStyle() []string
 	IgnoreStrings() []string
 	Update(func() error)
 
@@ -247,7 +249,7 @@ func (self *SideListPanel[T]) currentSelection() panelSelection[T] {
 	return selection
 }
 
-func (self *SideListPanel[T]) filterAndSort(selection panelSelection[T]) {
+func (self *SideListPanel[T]) filterAndSort(selection panelSelection[T]) map[T]filterItemScore {
 	filterString := self.Gui.FilterString(self.View)
 	filterScores := map[T]filterItemScore{}
 
@@ -265,12 +267,12 @@ func (self *SideListPanel[T]) filterAndSort(selection panelSelection[T]) {
 		}
 
 		if filterString != "" {
-			identityStrings := []string{}
-			if self.GetFilterIdentityStrings != nil {
-				identityStrings = self.GetFilterIdentityStrings(item)
+			identities := []FilterIdentity{}
+			if self.GetFilterIdentities != nil {
+				identities = self.GetFilterIdentities(item)
 			}
 
-			score, matches := matchFilterQuery(filterString, self.GetTableCells(item), identityStrings)
+			score, matches := matchFilterQuery(filterString, self.GetTableCells(item), identities)
 			if matches {
 				filterScores[item] = score
 			}
@@ -306,23 +308,25 @@ func (self *SideListPanel[T]) filterAndSort(selection panelSelection[T]) {
 
 			if selectedItemIdx >= 0 {
 				self.SetSelectedLineIdx(selectedItemIdx)
-				return
+				return filterScores
 			}
 		}
 		self.SetSelectedLineIdx(0)
-		return
+		return filterScores
 	}
 
 	self.clampSelectedLineIdx()
+	return filterScores
 }
 
 func (self *SideListPanel[T]) RerenderList() error {
-	self.FilterAndSort()
+	filterScores := self.filterAndSort(self.currentSelection())
 
 	self.Gui.Update(func() error {
 		self.View.Clear()
 		table := lo.Map(self.List.GetItems(), func(item T, index int) []string {
-			return self.GetTableCells(item)
+			cells := self.GetTableCells(item)
+			return highlightFilterMatches(cells, filterScores[item], self.Gui.FilterMatchStyle())
 		})
 		renderedTable, err := utils.RenderTable(table)
 		if err != nil {

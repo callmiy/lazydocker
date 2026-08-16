@@ -5,10 +5,11 @@ import (
 
 	dockerContainer "github.com/docker/docker/api/types/container"
 	"github.com/jesseduffield/lazydocker/pkg/commands"
+	"github.com/jesseduffield/lazydocker/pkg/gui/panels"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFilterIdentityStrings(t *testing.T) {
+func TestFilterIdentities(t *testing.T) {
 	container := &commands.Container{
 		Name: "container-name",
 		ID:   "container-id",
@@ -17,19 +18,31 @@ func TestFilterIdentityStrings(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, []string{"project-name"}, projectFilterIdentityStrings(&commands.Project{Name: "project-name"}))
-	assert.Equal(t, []string{"service-name"}, serviceFilterIdentityStrings(&commands.Service{Name: "service-name"}))
+	assert.Equal(t, []panels.FilterIdentity{{Value: "project-name", DisplayCell: 0}}, projectFilterIdentities(&commands.Project{Name: "project-name"}))
+	assert.Equal(t, []panels.FilterIdentity{{Value: "service-name", DisplayCell: 2}}, serviceFilterIdentities(&commands.Service{Name: "service-name"}))
 	assert.Equal(
 		t,
-		[]string{"service-name", "container-image"},
-		serviceFilterIdentityStrings(&commands.Service{Name: "service-name", Container: container}),
+		[]panels.FilterIdentity{{Value: "service-name", DisplayCell: 2}, {Value: "container-image", DisplayCell: 5}},
+		serviceFilterIdentities(&commands.Service{Name: "service-name", Container: container}),
 	)
-	assert.Equal(t, []string{"container-name", "container-id", "container-image"}, containerFilterIdentityStrings(container))
 	assert.Equal(
 		t,
-		[]string{"image-name", "image-tag", "image-id"},
-		imageFilterIdentityStrings(&commands.Image{Name: "image-name", Tag: "image-tag", ID: "sha256:image-id"}),
+		[]panels.FilterIdentity{
+			{Value: "container-name", DisplayCell: 2},
+			{Value: "container-id", DisplayCell: panels.HiddenFilterIdentityCell},
+			{Value: "container-image", DisplayCell: 5},
+		},
+		containerFilterIdentities(container),
 	)
-	assert.Equal(t, []string{"volume-name"}, volumeFilterIdentityStrings(&commands.Volume{Name: "volume-name"}))
-	assert.Equal(t, []string{"network-name"}, networkFilterIdentityStrings(&commands.Network{Name: "network-name"}))
+	assert.Equal(
+		t,
+		[]panels.FilterIdentity{
+			{Value: "image-name", DisplayCell: 0},
+			{Value: "image-tag", DisplayCell: 1},
+			{Value: "image-id", DisplayCell: panels.HiddenFilterIdentityCell},
+		},
+		imageFilterIdentities(&commands.Image{Name: "image-name", Tag: "image-tag", ID: "sha256:image-id"}),
+	)
+	assert.Equal(t, []panels.FilterIdentity{{Value: "volume-name", DisplayCell: 1}}, volumeFilterIdentities(&commands.Volume{Name: "volume-name"}))
+	assert.Equal(t, []panels.FilterIdentity{{Value: "network-name", DisplayCell: 1}}, networkFilterIdentities(&commands.Network{Name: "network-name"}))
 }
