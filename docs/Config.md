@@ -79,6 +79,7 @@ commandTemplates:
   stopService: '{{ .DockerCompose }} stop {{ .Service.Name }}'
   serviceLogs: '{{ .DockerCompose }} logs --since=60m --follow {{ .Service.Name }}'
   viewServiceLogs: '{{ .DockerCompose }} logs --follow {{ .Service.Name }}'
+  serviceConfig: '{{ .DockerCompose }} config {{ .Service.Name }}'
   rebuildService: '{{ .DockerCompose }} up -d --build {{ .Service.Name }}'
   recreateService: '{{ .DockerCompose }} up -d --force-recreate {{ .Service.Name }}'
   allLogs: '{{ .DockerCompose }} logs --tail=300 --follow'

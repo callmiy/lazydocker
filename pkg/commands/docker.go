@@ -511,16 +511,23 @@ func (c *DockerCommand) DockerComposeConfig() string {
 
 // DockerComposeConfigForProject returns the result of 'docker-compose config' for a specific project
 func (c *DockerCommand) DockerComposeConfigForProject(project *Project) string {
+	output, err := c.ResolvedDockerComposeConfig(project)
+	if err != nil {
+		return err.Error()
+	}
+	return output
+}
+
+// ResolvedDockerComposeConfig returns the resolved compose config while
+// preserving command errors for callers that need to report them separately.
+func (c *DockerCommand) ResolvedDockerComposeConfig(project *Project) (string, error) {
 	output, err := c.OSCommand.RunCommandWithOutput(
 		utils.ApplyTemplate(
 			c.OSCommand.Config.UserConfig.CommandTemplates.DockerComposeConfig,
 			c.NewCommandObject(CommandObject{Project: project}),
 		),
 	)
-	if err != nil {
-		output = err.Error()
-	}
-	return output
+	return output, err
 }
 
 // determineDockerHost tries to the determine the docker host that we should connect to

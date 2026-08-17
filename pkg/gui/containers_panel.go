@@ -463,6 +463,27 @@ func (gui *Gui) handleContainerViewLogs(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
+func (gui *Gui) handleContainerEditConfig(g *gocui.Gui, v *gocui.View) error {
+	ctr, err := gui.Panels.Containers.GetSelectedItem()
+	if err != nil {
+		return nil
+	}
+	if !ctr.DetailsLoaded() {
+		return gui.createErrorPanel(gui.Tr.WaitingForContainerInfo)
+	}
+
+	content, err := containerInspectYaml(ctr)
+	if err != nil {
+		return gui.createErrorPanel(err.Error())
+	}
+
+	return gui.editGeneratedConfig("container", ctr.Name, string(content))
+}
+
+func containerInspectYaml(ctr *commands.Container) ([]byte, error) {
+	return utils.MarshalIntoYaml(ctr.Details)
+}
+
 func (gui *Gui) handleContainersExecShell(g *gocui.Gui, v *gocui.View) error {
 	ctr, err := gui.Panels.Containers.GetSelectedItem()
 	if err != nil {

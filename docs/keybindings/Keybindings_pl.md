@@ -8,6 +8,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: edytuj konfigurację
   <kbd>o</kbd>: otwórz konfigurację
   <kbd>m</kbd>: pokaż logi
+  <kbd>M</kbd>: view config in editor
   <kbd>gg</kbd>: go to top
   <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: skup na głównym panelu
@@ -26,6 +27,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>r</kbd>: restartuj
   <kbd>a</kbd>: przyczep
   <kbd>m</kbd>: pokaż logi
+  <kbd>M</kbd>: view config in editor
   <kbd>E</kbd>: exec shell
   <kbd>c</kbd>: wykonaj predefiniowaną własną komende
   <kbd>b</kbd>: view bulk commands
@@ -49,6 +51,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>S</kbd>: start
   <kbd>a</kbd>: przyczep
   <kbd>m</kbd>: pokaż logi
+  <kbd>M</kbd>: view config in editor
   <kbd>U</kbd>: up project
   <kbd>D</kbd>: down project
   <kbd>R</kbd>: pokaż opcje restartu

@@ -25,6 +25,10 @@ func TestFilterMatchStyleDefaultsAndCanBeDisabled(t *testing.T) {
 	assert.Empty(t, config.Gui.Theme.FilterMatchStyle)
 }
 
+func TestServiceConfigCommandTemplateDefault(t *testing.T) {
+	assert.Equal(t, "{{ .DockerCompose }} config {{ .Service.Name }}", GetDefaultConfig().CommandTemplates.ServiceConfig)
+}
+
 func TestDockerComposeCommandNoFiles(t *testing.T) {
 	composeFiles := []string{}
 	conf, err := NewAppConfig("name", "version", "commit", "date", "buildSource", false, composeFiles, "projectDir", "")

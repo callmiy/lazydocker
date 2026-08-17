@@ -8,6 +8,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: 编辑lazydocker配置
   <kbd>o</kbd>: 打开lazydocker配置
   <kbd>m</kbd>: 查看日志
+  <kbd>M</kbd>: view config in editor
   <kbd>gg</kbd>: go to top
   <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: 聚焦主面板
@@ -26,6 +27,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>r</kbd>: 重新启动
   <kbd>a</kbd>: attach
   <kbd>m</kbd>: 查看日志
+  <kbd>M</kbd>: view config in editor
   <kbd>E</kbd>: 执行shell
   <kbd>c</kbd>: 运行预定义的自定义命令
   <kbd>b</kbd>: 查看批量命令
@@ -49,6 +51,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>S</kbd>: 启动项目
   <kbd>a</kbd>: attach
   <kbd>m</kbd>: 查看日志
+  <kbd>M</kbd>: view config in editor
   <kbd>U</kbd>: 创建并启动容器
   <kbd>D</kbd>: 停止并移除容器
   <kbd>R</kbd>: 查看重启选项

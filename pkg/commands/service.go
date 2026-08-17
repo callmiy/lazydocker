@@ -72,6 +72,17 @@ func (s *Service) ViewLogs() (*exec.Cmd, error) {
 	return cmd, nil
 }
 
+// ResolvedConfig returns the fully-resolved compose config for the service.
+func (s *Service) ResolvedConfig() (string, error) {
+	templateString := s.OSCommand.Config.UserConfig.CommandTemplates.ServiceConfig
+	command := utils.ApplyTemplate(
+		templateString,
+		s.DockerCommand.NewCommandObject(CommandObject{Service: s}),
+	)
+
+	return s.OSCommand.RunCommandWithOutput(command)
+}
+
 // RenderTop renders the process list of the service
 func (s *Service) RenderTop(ctx context.Context) (string, error) {
 	templateString := s.OSCommand.Config.UserConfig.CommandTemplates.ServiceTop

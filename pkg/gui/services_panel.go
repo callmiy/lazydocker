@@ -349,6 +349,23 @@ func (gui *Gui) handleServiceRenderLogsToMain(g *gocui.Gui, v *gocui.View) error
 	return gui.runSubprocess(c)
 }
 
+func (gui *Gui) handleServiceEditResolvedConfig(g *gocui.Gui, v *gocui.View) error {
+	service, err := gui.Panels.Services.GetSelectedItem()
+	if err != nil {
+		return nil
+	}
+	if message := gui.composeConfigAvailabilityError(service.ProjectName); message != "" {
+		return gui.createErrorPanel(message)
+	}
+
+	content, err := service.ResolvedConfig()
+	if err != nil {
+		return gui.createErrorPanel(err.Error())
+	}
+
+	return gui.editGeneratedConfig("service", service.Name, content)
+}
+
 func (gui *Gui) handleProjectUp(g *gocui.Gui, v *gocui.View) error {
 	project, _ := gui.Panels.Projects.GetSelectedItem()
 	if project != nil && project.Name != gui.DockerCommand.LocalProjectName {

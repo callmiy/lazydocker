@@ -8,6 +8,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: lazzydocker ayarlarını düzenle
   <kbd>o</kbd>: lazydocker ayarlarını aç
   <kbd>m</kbd>: kayıt defterini görüntüle
+  <kbd>M</kbd>: view config in editor
   <kbd>gg</kbd>: go to top
   <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: ana panele odaklan
@@ -26,6 +27,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>r</kbd>: yeniden başlat
   <kbd>a</kbd>: bağlan/iliştir
   <kbd>m</kbd>: kayıt defterini görüntüle
+  <kbd>M</kbd>: view config in editor
   <kbd>E</kbd>: exec shell
   <kbd>c</kbd>: önceden tanımlanmış özel komutu çalıştır
   <kbd>b</kbd>: view bulk commands
@@ -49,6 +51,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>S</kbd>: start
   <kbd>a</kbd>: bağlan/iliştir
   <kbd>m</kbd>: kayıt defterini görüntüle
+  <kbd>M</kbd>: view config in editor
   <kbd>U</kbd>: up project
   <kbd>D</kbd>: down project
   <kbd>R</kbd>: yeniden başlatma seçeneklerini görüntüle

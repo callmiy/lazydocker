@@ -191,6 +191,10 @@ type CommandTemplatesConfig struct {
 	// performance.
 	ViewServiceLogs string `yaml:"viewServiceLogs,omitempty"`
 
+	// ServiceConfig renders the resolved compose config for one service so it
+	// can be inspected in an editor.
+	ServiceConfig string `yaml:"serviceConfig,omitempty"`
+
 	// RebuildService is the command for rebuilding a service. Defaults to
 	// something along the lines of `{{ .DockerCompose }} up --build {{
 	// .Service.Name }}`
@@ -399,6 +403,7 @@ func GetDefaultConfig() UserConfig {
 			StopService:              "{{ .DockerCompose }} stop {{ .Service.Name }}",
 			ServiceLogs:              "{{ .DockerCompose }} logs --since=60m --follow {{ .Service.Name }}",
 			ViewServiceLogs:          "{{ .DockerCompose }} logs --follow {{ .Service.Name }}",
+			ServiceConfig:            "{{ .DockerCompose }} config {{ .Service.Name }}",
 			AllLogs:                  "{{ .DockerCompose }} logs --tail=300 --follow",
 			ViewAllLogs:              "{{ .DockerCompose }} logs",
 			DockerComposeConfig:      "{{ .DockerCompose }} config",

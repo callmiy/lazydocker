@@ -2,6 +2,7 @@ package commands
 
 import (
 	"os"
+	"os/exec"
 	"testing"
 
 	"github.com/docker/docker/client"
@@ -61,6 +62,36 @@ func TestNewDockerClientVersionNegotiation(t *testing.T) {
 		assert.NotEqual(t, "1.25", cli.ClientVersion(),
 			"client version should not be locked to DOCKER_API_VERSION env var")
 	})
+}
+
+func TestResolvedDockerComposeConfigPreservesOutputAndErrors(t *testing.T) {
+	userConfig := config.GetDefaultConfig()
+	userConfig.CommandTemplates.DockerCompose = "custom-compose --file stack.yml"
+	userConfig.CommandTemplates.DockerComposeConfig = "{{ .DockerCompose }} render-project"
+	appConfig := &config.AppConfig{UserConfig: &userConfig}
+	osCommand := NewOSCommand(NewDummyLog(), appConfig)
+
+	var commandName string
+	var commandArgs []string
+	osCommand.SetCommand(func(name string, args ...string) *exec.Cmd {
+		commandName = name
+		commandArgs = args
+		return exec.Command("printf", "resolved project config")
+	})
+	dockerCommand := &DockerCommand{Config: appConfig, OSCommand: osCommand}
+
+	output, err := dockerCommand.ResolvedDockerComposeConfig(&Project{Name: "accloud-lde"})
+
+	assert.NoError(t, err)
+	assert.Equal(t, "resolved project config", output)
+	assert.Equal(t, "custom-compose", commandName)
+	assert.Equal(t, []string{"--file", "stack.yml", "-p", "accloud-lde", "render-project"}, commandArgs)
+
+	osCommand.SetCommand(func(name string, args ...string) *exec.Cmd {
+		return exec.Command("sh", "-c", "exit 24")
+	})
+	_, err = dockerCommand.ResolvedDockerComposeConfig(&Project{Name: "accloud-lde"})
+	assert.Error(t, err)
 }
 
 // TestIsProjectScoped covers the predicate that drives whether the

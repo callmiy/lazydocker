@@ -17,6 +17,9 @@ type TranslationSet struct {
 	NoViewMachingNewLineFocusedSwitchStatement string
 	OpenConfig                                 string
 	EditConfig                                 string
+	ViewConfig                                 string
+	CannotViewNonLocalConfig                   string
+	ComposeConfigUnavailable                   string
 	ConfirmQuit                                string
 	ConfirmUpProject                           string
 	ErrorOccurred                              string
@@ -179,6 +182,9 @@ func englishSet() TranslationSet {
 		Scroll:                      "scroll",
 		OpenConfig:                  "open lazydocker config",
 		EditConfig:                  "edit lazydocker config",
+		ViewConfig:                  "view config in editor",
+		CannotViewNonLocalConfig:    "Config is only available for the local compose project. Run lazydocker from that project's directory.",
+		ComposeConfigUnavailable:    "Compose config is only available when launched from a docker-compose project directory",
 		Cancel:                      "cancel",
 		Remove:                      "remove",
 		HideStopped:                 "hide/show stopped containers",

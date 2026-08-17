@@ -220,6 +220,23 @@ func (gui *Gui) handleEditConfig(g *gocui.Gui, v *gocui.View) error {
 	return gui.editFile(gui.Config.ConfigFilename())
 }
 
+func (gui *Gui) handleProjectEditResolvedConfig(g *gocui.Gui, v *gocui.View) error {
+	project, err := gui.Panels.Projects.GetSelectedItem()
+	if err != nil {
+		return nil
+	}
+	if message := gui.composeConfigAvailabilityError(project.Name); message != "" {
+		return gui.createErrorPanel(message)
+	}
+
+	content, err := gui.DockerCommand.ResolvedDockerComposeConfig(project)
+	if err != nil {
+		return gui.createErrorPanel(err.Error())
+	}
+
+	return gui.editGeneratedConfig("project", project.Name, content)
+}
+
 func lazydockerTitle() string {
 	return `
    _                     _            _

@@ -8,6 +8,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>e</kbd>: edit lazydocker config
   <kbd>o</kbd>: open lazydocker config
   <kbd>m</kbd>: view logs
+  <kbd>M</kbd>: view config in editor
   <kbd>gg</kbd>: go to top
   <kbd>G</kbd>: go to bottom
   <kbd>enter</kbd>: focus main panel
@@ -26,6 +27,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>r</kbd>: restart
   <kbd>a</kbd>: attach
   <kbd>m</kbd>: view logs
+  <kbd>M</kbd>: view config in editor
   <kbd>E</kbd>: exec shell
   <kbd>c</kbd>: run predefined custom command
   <kbd>b</kbd>: view bulk commands
@@ -49,6 +51,7 @@ _This file is auto-generated. To update, make the changes in the pkg/i18n direct
   <kbd>S</kbd>: start
   <kbd>a</kbd>: attach
   <kbd>m</kbd>: view logs
+  <kbd>M</kbd>: view config in editor
   <kbd>U</kbd>: up project
   <kbd>D</kbd>: down project
   <kbd>R</kbd>: view restart options
