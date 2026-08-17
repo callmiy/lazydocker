@@ -3,6 +3,7 @@ package gui
 import (
 	"errors"
 	"os"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -27,7 +28,9 @@ func TestWithGeneratedConfigFileCreatesPrivateFileAndRemovesIt(t *testing.T) {
 		if !assert.NoError(t, err) {
 			return err
 		}
-		assert.Equal(t, os.FileMode(0o600), info.Mode().Perm())
+		if runtime.GOOS != "windows" {
+			assert.Equal(t, os.FileMode(0o600), info.Mode().Perm())
+		}
 
 		content, err := os.ReadFile(path)
 		if !assert.NoError(t, err) {
