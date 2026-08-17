@@ -302,6 +302,23 @@ func TestFilterAndSortPreservesSelectedObject(t *testing.T) {
 	assert.Equal(t, "scheduling", selected)
 }
 
+func TestSelectFirstItemSelectsHighestRankedFilterResult(t *testing.T) {
+	gui := &filterTestGui{}
+	panel := newFilterTestPanel(gui)
+	panel.SetItems([]string{"apiemployees", "apipatients", "apiopti", "apiopti_worker"})
+	panel.SetSelectedLineIdx(panel.List.GetIndex("apiopti_worker"))
+
+	gui.query = "apip"
+	panel.FilterAndSort()
+	panel.SelectFirstItem()
+
+	selected, ok := panel.List.TryGet(panel.SelectedIdx)
+	if !assert.True(t, ok) {
+		return
+	}
+	assert.Equal(t, "apipatients", selected)
+}
+
 func TestSetItemsPreservesSelectionByStableKeyDuringActiveFilter(t *testing.T) {
 	gui := &filterTestGui{}
 	panel := &SideListPanel[*filterTestItem]{

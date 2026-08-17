@@ -70,6 +70,8 @@ func (gui *Gui) commitFilter() error {
 		if err := gui.clearFilter(); err != nil {
 			return err
 		}
+	} else {
+		gui.State.Filter.panel.SelectFirstItem()
 	}
 
 	return gui.returnFocus()
