@@ -341,7 +341,7 @@ func (gui *Gui) GetInitialKeybindings() []*Binding {
 			ViewName:    "services",
 			Key:         'M',
 			Modifier:    gocui.ModNone,
-			Handler:     gui.handleServiceEditResolvedConfig,
+			Handler:     gui.handleServiceEditContainerConfig,
 			Description: gui.Tr.ViewConfig,
 		},
 		{

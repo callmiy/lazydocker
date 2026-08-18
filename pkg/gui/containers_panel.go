@@ -468,6 +468,11 @@ func (gui *Gui) handleContainerEditConfig(g *gocui.Gui, v *gocui.View) error {
 	if err != nil {
 		return nil
 	}
+
+	return gui.editContainerConfig(ctr)
+}
+
+func (gui *Gui) editContainerConfig(ctr *commands.Container) error {
 	if !ctr.DetailsLoaded() {
 		return gui.createErrorPanel(gui.Tr.WaitingForContainerInfo)
 	}
